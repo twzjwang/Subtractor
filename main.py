@@ -10,7 +10,7 @@ class colors:
     fail = '\033[91m'
     close = '\033[0m'
 
-TRAINING_SIZE = 80000
+TRAINING_SIZE = 200000
 DIGITS = 3
 REVERSE = False
 MAXLEN = DIGITS + 1 + DIGITS
@@ -18,7 +18,7 @@ chars = '0123456789- '
 RNN = layers.LSTM
 HIDDEN_SIZE = 128
 BATCH_SIZE = 128
-LAYERS = 1
+LAYERS = 2
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -77,10 +77,10 @@ x = x[indices]
 y = y[indices]
 
 # train_test_split
-train_x = x[:20000]
-train_y = y[:20000]
-test_x = x[20000:]
-test_y = y[20000:]
+train_x = x[:50000]
+train_y = y[:50000]
+test_x = x[50000:]
+test_y = y[50000:]
 
 split_at = len(train_x) - len(train_x) // 10
 (x_train, x_val) = train_x[:split_at], train_x[split_at:]
@@ -138,8 +138,13 @@ for iteration in range(100):
         print(guess)
 
 print("MSG : Prediction")
-test_x = ["555-275", "860-7  ", "340-29 "]
-test_y = ["280 ", "853 ", "311 "]
+a = np.random.randint(1000, size=10000)
+b = np.random.randint(1000, size=10000)
+test_x = []
+test_y = []
+for i in range(0,10000):
+    test_x.append(str(a[i])+'-'+str(b[i]))
+    test_y.append(str(a[i] - b[i]))
 x = np.zeros((len(test_x), MAXLEN, len(chars)), dtype=np.bool)
 y = np.zeros((len(test_y), DIGITS + 1, len(chars)), dtype=np.bool)
 for j, (i, c) in enumerate(zip(test_x, test_y)):
